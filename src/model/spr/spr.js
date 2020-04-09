@@ -1,50 +1,76 @@
-import {pool} from '../_db.js';
+import {query} from '../_db.js';
+//import meta from '../meta.js';
+//import test from '../init.js';
 
-export class Spr {
-  constructor(vid) {
-    this.elms = [];
-    
-  }
-  getElms() {
-    try { 
-      let {rows} = await pool.query('SELECT $1', [id]);
-      appeal = rows;
-      console.log(appeal);
-    } catch(err) {
-      console.log(err.message);
-    }
-  }
-  re
-}
-export async function get(req, res, next) {
-	// the `slug` parameter is available because
-	// this file is called [slug].json.js
-  const { id } = req.params;
-  console.log(req.params);
-  let appeal;
-  try { 
-    let {rows} = await pool.query('SELECT $1', [id]);
-    appeal = rows;
-    console.log(appeal);
-  } catch(err) {
-    console.log(err.message);
-  }
+let sql =(() => {
+  let ret={};
+  ret.getFolders = `SELECT
+  "partners"."id", "partners"."folder", path, 
+  COALESCE(array_length(path, 1), 0) AS deep, 
+  "partners"."name" AS "name"
+  FROM "partners"  WHERE "partners"."folder" = true
+  ORDER BY deep, name;`
+  ret.getElms = `SELECT
+  "partners"."id", "partners"."folder", path, cardinality(path)+1 AS deep,
+  "partners"."name" AS "name" ,"partners"."docName" ,"partners"."phone" ,"partners"."inn" 
+  ,"partners"."kpp" ,"partners"."ogrn" ,"partners"."email" ,"partners"."www" ,"partners"."address"
+  ,"partners"."urAddress"   ,"partners"."status" ,"partners"."added",
+  ARRAY[to_char("pStaff"."id",'999'), "pStaff"."name", 'dsdsd'] AS "mainContact",
+  ("pAccounts"."id", "pAccounts"."name", 10) AS "mainAccount"
+  FROM "partners"
+  LEFT JOIN "pStaff" ON "partners"."mainContact" = "pStaff"."id"
+  LEFT JOIN "pAccounts" ON "partners"."mainContact" = "pAccounts"."id"
   
-	if (appeal ) {
-		res.writeHead(200, {
-			'Content-Type': 'application/json'
-		});
+  ORDER BY deep, folder, name;`
+  ret.getElm = `SELECT
+  "partners"."id", "partners"."folder", path, cardinality(path)+1 AS deep,
+  "partners"."name" AS "name" ,"partners"."docName" ,"partners"."phone" ,"partners"."inn" 
+  ,"partners"."kpp" ,"partners"."ogrn" ,"partners"."email" ,"partners"."www" ,"partners"."address"
+  ,"partners"."urAddress"   ,"partners"."status" ,"partners"."added",
+  ARRAY[to_char("pStaff"."id",'999'), "pStaff"."name", 'dsdsd'] AS "mainContact",
+  ("pAccounts"."id", "pAccounts"."name", 10) AS "mainAccount"
+  FROM "partners"
+  LEFT JOIN "pStaff" ON "partners"."mainContact" = "pStaff"."id"
+  LEFT JOIN "pAccounts" ON "partners"."mainContact" = "pAccounts"."id"
+  WHERE "partners"."id" = $1
+  ORDER BY deep, folder, name;`;
+  ret.getFolder = `SELECT
+  "partners"."id", "partners"."folder", path, cardinality(path)+1 AS deep,
+  "partners"."name" AS "name" ,"partners"."docName" ,"partners"."phone" ,"partners"."inn" 
+  ,"partners"."kpp" ,"partners"."ogrn" ,"partners"."email" ,"partners"."www" ,"partners"."address"
+  ,"partners"."urAddress"   ,"partners"."status" ,"partners"."added",
+  ("pStaff"."id", "pStaff"."name") AS "mainContact",
+  ("pAccounts"."id", "pAccounts"."name") AS "mainAccount"
+  FROM "partners"
+  LEFT JOIN "pStaff" ON "partners"."mainContact" = "pStaff"."id"
+  LEFT JOIN "pAccounts" ON "partners"."mainContact" = "pAccounts"."id"
+  
+  WHERE path[array_upper(path, 1)] = $1
+  ORDER BY deep, name;`;
+  return ret;
+})();
+export class Spr {
+  
+  constructor(vid) {
+    //console.log(sql);
 
-		res.end(JSON.stringify(appeal));
-	} else {
-    //console.log(album);
-		res.writeHead(404, {
-			'Content-Type': 'application/json'
-		});
-   
-		res.end(JSON.stringify({
-      message: `Not found`,
-      error: 404
-		}));
-	} 
+  }
+  async getFolders() {
+    //console.log(sql.getFolders)
+      let rows = await query(sql.getFolders);
+    return rows;
+  }
+  async getElms() {
+    let rows = await query(sql.getElms);
+    return rows;
+  }
+  async getElm(id) {
+    let rows = await query(sql.getElm, [id]);
+    return rows;
+  }
+  async getFolder(id) {
+    //console.log(sql.getFolders)
+      let rows = await query(sql.getFolder, [id]);
+    return rows;
+  }
 }

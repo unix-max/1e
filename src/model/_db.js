@@ -7,4 +7,16 @@ const pool = new Pool({
   port: 5432,
 })
 
-export {pool};
+let query = async function(sql, param=[]) {
+  let rows;
+  console.log(sql);
+  try { 
+    
+    ({rows} = await pool.query(sql, param));
+    //console.log(rows);
+  } catch(err) {
+    console.log(err.message);
+  }
+  return rows;
+}
+export {pool, query };
