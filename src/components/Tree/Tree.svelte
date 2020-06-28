@@ -4,7 +4,7 @@
   //export let post;
   import TreeItem from './TreeItem.svelte'
   
-  export let data = {name: 'not'};
+  export let data = {in:[{name:'Не загружен'}]};
 </script>
 
 <style>
