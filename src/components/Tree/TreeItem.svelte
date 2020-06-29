@@ -3,7 +3,9 @@
   import { dndzone } from 'svelte-dnd-action';
   
   import Icon from './Icon.svelte'
-  export let items;
+  export let parent;
+  let items = parent.in;
+  
   function connectorClick(item) {
     item.open = !item.open;
     items = items;
@@ -11,8 +13,10 @@
   }
   
   const flipDurationMs = 300;
-	function handleDndConsider(e) {
-		items = e.detail.items;
+	function handleDndConsider(parent, e) {
+    console.log(e.detail.items);
+    items = e.detail.items;
+    //console.log(items1);
 	}
 	function handleDndFinalize(e) {
 		items = e.detail.items;
@@ -21,7 +25,10 @@
 <style>
 
 </style>
-<section use:dndzone={{items, flipDurationMs}} on:consider={handleDndConsider} on:finalize={handleDndFinalize}>
+<section use:dndzone={{items, flipDurationMs, type: parent.id}}
+  on:consider={(e) => handleDndConsider(parent, e)}
+  on:finalize={handleDndFinalize}
+  >
   
   {#each items as item(item.id)}
     <li class:folder="{item.in}" animate:flip="{{duration: flipDurationMs}}"
@@ -32,7 +39,7 @@
       {item.name}
       {#if item.open}
         <ul>
-          <svelte:self items={item.in}/>
+          <svelte:self parent={item}/>
         </ul>
 
       {/if}

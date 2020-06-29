@@ -11,6 +11,7 @@ const close = () => (isOpen = false);
 const open = () => (isOpen = true);
 
 let tree ={};
+
 onMount(async () => {
 //console.log('mount');
 let obj = await import('../clSpr.js');
@@ -21,6 +22,7 @@ await spr.getFolders();
 tree.in = spr.folders;
 //tree = tree;
 console.log(tree);
+
   });
   
 
@@ -64,16 +66,17 @@ console.log(tree);
     </div>
   <div class="tree1">
     <Tree data = {tree}></Tree>
+
   </div>
   <div class="table1">
   <!--  <Table></Table> -->
   </div>
   <div class="footer1"></div>
-
+<!--
   <Popup {isOpen} on:close={close} header="Title">
   <SprElm elm={tree.in[1]}/>
   <div slot="footer">
     <Button on:click={close}>Ok</Button>
   </div>
-</Popup>
+</Popup> -->
 </div>

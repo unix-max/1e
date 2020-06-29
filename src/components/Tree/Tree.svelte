@@ -71,7 +71,7 @@
 
   {#if data.in}
     <ul class="container">
-      <TreeItem items={data.in}/>
+      <TreeItem parent={data}/>
     </ul>
   {/if}
 </div>
