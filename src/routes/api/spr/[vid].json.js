@@ -1,5 +1,5 @@
 //import {pool} from '../../../../model/_db.js'
-import {Spr} from '../../../model/spr/spr.js'
+//import {Spr} from '../../../model/spr/spr.js'
 
 export async function get(req, res, next) {
 	// the `slug` parameter is available because

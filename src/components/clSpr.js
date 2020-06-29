@@ -22,7 +22,9 @@ export default class Spr {
     }
   }
   async getFolders() {
-    let data = await this.getData('http://localhost:3000/api/spr/partners.json?id=all');
+    //let data = await this.getData('http://localhost:3000/api/spr/partners.json?id=all');
+    let data = await this.getData('http://localhost:3000/api/spr/all.json');
+    
     let list = {};
     for (let dataElm of data) {
       let elm = new SprElm(dataElm);
