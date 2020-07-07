@@ -1,49 +1,79 @@
 <script>
-	import { flip } from 'svelte/animate';
-  import { dndzone } from 'svelte-dnd-action';
-  
-  import Icon from './Icon.svelte'
+  import { slide } from "svelte/transition";
+  // import { dndzone } from "svelte-dnd-action";
+
+  import Icon from "./Icon.svelte";
   export let parent;
+  export let icons;
+  export let flags;
   let items = parent.in;
-  
+  let type;
+
   function connectorClick(item) {
+    if (!item.folder) return;
     item.open = !item.open;
     items = items;
-		console.log(item);
+    // console.log(item.flag);
+    // console.log(item.open);
   }
-  
-  const flipDurationMs = 300;
-	function handleDndConsider(parent, e) {
-    console.log(e.detail.items);
-    items = e.detail.items;
-    //console.log(items1);
-	}
-	function handleDndFinalize(e) {
-		items = e.detail.items;
-	}
+
+  // const flipDurationMs = 500;
+  // function handleDndConsider(parent, e) {
+  //   console.log(e.detail.items);
+  //   items = e.detail.items;
+  //   //console.log(items1);
+  // }
+  // function handleDndFinalize(e) {
+  //   items = e.detail.items;
+  // }
 </script>
+
 <style>
-
+  /* .hidden {
+    display: none;
+  }
+  .visible {
+    display: block;
+  } */
 </style>
-<section use:dndzone={{items, flipDurationMs, type: parent.id}}
-  on:consider={(e) => handleDndConsider(parent, e)}
-  on:finalize={handleDndFinalize}
-  >
-  
-  {#each items as item(item.id)}
-    <li class:folder="{item.in}" animate:flip="{{duration: flipDurationMs}}"
-      class:open="{item.open}" type={item.name}
-      >
-      <span class="connector" on:click="{() => connectorClick(item)}"></span>
-      <Icon type={item.type ? item.type : item.in ? 'folder' : 'html'}/>
-      {item.name}
-      {#if item.open}
-        <ul>
-          <svelte:self parent={item}/>
-        </ul>
 
-      {/if}
+<!-- <section
+  use:dndzone={{ items, flipDurationMs }}
+  on:consider={e => handleDndConsider(parent, e)}
+  on:finalize={handleDndFinalize}> -->
 
-    </li>
-  {/each}
-</section>
+{#each items as item (item.id)}
+  <li
+    transition:slide
+    class:folder={item.in}
+    class:open={item.open}
+    type={item.name}>
+    <div class="treeConteiner">
+      <span class="connector" on:click={() => connectorClick(item)} />
+      <input type="checkbox" />
+      <div class="clickBox" on:click={() => connectorClick(item)}>
+        {#if item.open}
+          <Icon type="folderOpen" {icons} {flags} flagType={item.flag} />
+        {:else}
+          <Icon
+            type={item.type ? item.type : item.in ? 'folder' : 'html'}
+            {icons}
+            {flags}
+            flagType={item.flag} />
+        {/if}
+      </div>
+      <div on:click={() => connectorClick(item)}>
+        {#if !item.edited}
+          <span class="name">{item.name}</span>
+        {/if}
+      </div>
+    </div>
+    {#if item.open}
+      <ul>
+        <svelte:self parent={item} />
+      </ul>
+    {/if}
+  </li>
+{/each}
+
+<!-- </section> -->

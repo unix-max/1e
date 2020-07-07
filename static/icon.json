@@ -1,0 +1,17 @@
+{
+    "folder": "../icons/Tipe3/folder-close.png",
+    "folderOpen": "../icons/Tipe3/folder-open.png",
+    "folderMusic": "../icons/Tipe3/folder-music.png",
+    "folderImg": "../icons/Tipe3/folder-img.png",
+    "folderSpam": "../icons/Tipe3/folder-spam.png",
+    "folderFilms": "../icons/Tipe3/folder-films.png",
+    "folderDoc": "../icons/Tipe3/folder-doc.png",
+    "pdf": "../icons/Tipe3/doc-pdf.png",
+    "doc": "../icons/Tipe3/doc-default.png",
+    "img": "../icons/Tipe3/doc-img.png",
+    "diagram": "../icons/Tipe3/doc-diagram.png",
+    "email": "../icons/Tipe3/doc-email.png",
+    "pPoint": "../icons/Tipe3/doc-ppoint.png",
+    "txt": "../icons/Tipe3/doc-txt.png",
+    "word": "../icons/Tipe3/doc-img.png"
+}

@@ -1,43 +1,44 @@
 <script>
-	import { onMount } from 'svelte';
-import Tree from '../Tree/Tree.svelte';
-//import Table from '1eLib/Table/Table.svelte';
-//import SprElm from '1eLib/Spr/SprElm.svelte';
-import Popup from "svelte-atoms/Popup.svelte";
-import Button from "svelte-atoms/Button.svelte";
-  
-let isOpen = false;
-const close = () => (isOpen = false);
-const open = () => (isOpen = true);
+  import { onMount } from "svelte";
+  import Tree from "../Tree/Tree.svelte";
+  //import Table from '1eLib/Table/Table.svelte';
+  //import SprElm from '1eLib/Spr/SprElm.svelte';
+  import Popup from "svelte-atoms/Popup.svelte";
+  import Button from "svelte-atoms/Button.svelte";
 
-let tree ={};
+  let isOpen = false;
+  const close = () => (isOpen = false);
+  const open = () => (isOpen = true);
 
-onMount(async () => {
-//console.log('mount');
-let obj = await import('../clSpr.js');
-let Spr = obj.default;
-let spr = new Spr();
-await spr.getFolders();
+  let tree = {};
+  let icons;
+  let flags;
 
-tree.in = spr.folders;
-//tree = tree;
-console.log(tree);
+  onMount(async () => {
+    //console.log('mount');
+    let obj = await import("../clSpr.js");
+    let Spr = obj.default;
+    let spr = new Spr();
+    await spr.getFolders();
+    icons = await spr.getData("http://localhost:3000/icon.json");
+    flags = await spr.getData("http://localhost:3000/flag.json");
+    console.log(icons);
 
+    tree.in = spr.folders;
+    //tree = tree;
+    // console.log(tree);
   });
-  
-
 </script>
-<style>
-	
 
+<style>
   .container {
-     display: grid;
-    grid-template-columns:  minmax(10%, 25%) auto ;
+    display: grid;
+    grid-template-columns: minmax(10%, 25%) auto;
     grid-template-rows: 50px auto 50px;
-    grid-template-areas: 
-    "header header"
-    "tree table"
-    "footer footer";
+    grid-template-areas:
+      "header header"
+      "tree table"
+      "footer footer";
   }
   .header1 {
     grid-area: header;
@@ -51,28 +52,24 @@ console.log(tree);
   .footer1 {
     grid-area: footer;
   }
-
 </style>
 
 <svelte:head>
-	<title>Sapper project template</title>
+  <title>Sapper project template</title>
 </svelte:head>
-
-
 
 <div class="container">
   <div class="header1">
     <Button on:click={open}>Open</Button>
-    </div>
+  </div>
   <div class="tree1">
-    <Tree data = {tree}></Tree>
-
+    <Tree data={tree} {icons} {flags} />
   </div>
   <div class="table1">
-  <!--  <Table></Table> -->
+    <!--  <Table></Table> -->
   </div>
-  <div class="footer1"></div>
-<!--
+  <div class="footer1" />
+  <!--
   <Popup {isOpen} on:close={close} header="Title">
   <SprElm elm={tree.in[1]}/>
   <div slot="footer">
