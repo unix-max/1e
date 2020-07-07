@@ -61,16 +61,16 @@
             {flags}
             flagType={item.flag} />
         {/if}
-      </div>
-      <div on:click={() => connectorClick(item)}>
-        {#if !item.edited}
-          <span class="name">{item.name}</span>
-        {/if}
+        <!-- <div on:click={() => connectorClick(item)}> -->
+        <!-- {#if !item.edited} -->
+        <span class="name">{item.name}</span>
+        <!-- {/if} -->
+        <!-- </div> -->
       </div>
     </div>
     {#if item.open}
       <ul>
-        <svelte:self parent={item} />
+        <svelte:self parent={item} {icons} {flags} />
       </ul>
     {/if}
   </li>

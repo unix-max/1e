@@ -22,7 +22,7 @@
     await spr.getFolders();
     icons = await spr.getData("http://localhost:3000/icon.json");
     flags = await spr.getData("http://localhost:3000/flag.json");
-    console.log(icons);
+    // console.log(icons);
 
     tree.in = spr.folders;
     //tree = tree;

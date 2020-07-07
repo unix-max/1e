@@ -1,14 +1,17 @@
 <script>
   import { scale } from "svelte/transition";
-  // import { onMount } from "svelte";
+  import { onMount } from "svelte";
   export let type = "doc";
   export let flagType;
   export let icons;
   export let flags;
-  let flag = flags[flagType];
+  let flag = flagType ? flags[flagType] : null;
   let elem = icons[type];
+  // console.log(icons.folderDoc);
 
   // onMount(async () => {
+  //   flag = flagType ? flags[flagType] : null;
+  //   elem = icons[type];
   //   //console.log('mount');
   //   let obj = await import("../clSpr.js");
   //   let Spr = obj.default;
