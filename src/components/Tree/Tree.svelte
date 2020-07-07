@@ -56,24 +56,21 @@
     text-align: start;
   }
   .tree :global(.connector) {
-    width: 10px;
-    height: 10px;
+    width: 18px;
+    height: 18px;
     transition: all 0.5s;
   }
   .tree :global(li.folder > .treeConteiner > .connector) {
-    background-image: url(../icons/Tipe3/arrow3.png);
+    background-image: url(../icons/plus.svg);
   }
   .tree :global(li.folder.open > .treeConteiner > .connector) {
-    background-image: url(../icons/Tipe3/arrow3.png);
-    transform: rotate(90deg);
+    background-image: url(../icons/minus.svg);
   }
   .tree :global(.treeConteiner) {
     cursor: pointer;
     margin: 2px;
   }
-  .tree :global(.clickBox) {
-    display: inline;
-  }
+  
   .tree :global(.treeConteiner > input) {
     position: relative;
     margin: 0;

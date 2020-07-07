@@ -29,12 +29,7 @@
 </script>
 
 <style>
-  /* .hidden {
-    display: none;
-  }
-  .visible {
-    display: block;
-  } */
+
 </style>
 
 <!-- <section
@@ -51,22 +46,19 @@
     <div class="treeConteiner">
       <span class="connector" on:click={() => connectorClick(item)} />
       <input type="checkbox" />
-      <div class="clickBox" on:click={() => connectorClick(item)}>
-        {#if item.open}
-          <Icon type="folderOpen" {icons} {flags} flagType={item.flag} />
-        {:else}
-          <Icon
-            type={item.type ? item.type : item.in ? 'folder' : 'html'}
-            {icons}
-            {flags}
-            flagType={item.flag} />
-        {/if}
-        <!-- <div on:click={() => connectorClick(item)}> -->
-        <!-- {#if !item.edited} -->
+
+      {#if item.open}
+        <Icon type="folderOpen" {icons} {flags} flagType={item.flag} />
+      {:else}
+        <Icon
+          type={item.type ? item.type : item.in ? 'folder' : 'html'}
+          {icons}
+          {flags}
+          flagType={item.flag} />
+      {/if}
+      {#if !item.edited}
         <span class="name">{item.name}</span>
-        <!-- {/if} -->
-        <!-- </div> -->
-      </div>
+      {/if}
     </div>
     {#if item.open}
       <ul>
