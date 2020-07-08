@@ -11,9 +11,9 @@
 <style>
   .tree {
     position: fixed;
-    padding: 20px;
+    padding: 20px 5px;
     left: 0;
-    width: 240px;
+    width: 400px;
     height: 80vh;
     overflow: auto;
     border: 1px dotted gray;
@@ -27,6 +27,7 @@
   }
 
   .tree :global(ul li) {
+    padding-left: 25px;
     list-style-type: none; /*
 		background-repeat: repeat-y;
     
@@ -56,8 +57,8 @@
     text-align: start;
   }
   .tree :global(.connector) {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     transition: all 0.5s;
   }
   .tree :global(li.folder > .treeConteiner > .connector) {

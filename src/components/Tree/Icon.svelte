@@ -1,6 +1,6 @@
 <script>
   import { scale } from "svelte/transition";
-  import { onMount } from "svelte";
+  // import { onMount } from "svelte";
   export let type = "doc";
   export let flagType;
   export let icons;
