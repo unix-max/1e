@@ -205,7 +205,7 @@
       </div>
       {#if item.open}
         <ul>
-          <svelte:self parent={item} {icons} {flags} />
+          <svelte:self parent={item} {icons} {flags} on:moveitem />
         </ul>
       {/if}
     </li>
