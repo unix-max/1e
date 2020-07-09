@@ -13,6 +13,7 @@
   let tree = {};
   let icons;
   let flags;
+  let changeInfo;
 
   onMount(async () => {
     //console.log('mount');
@@ -28,6 +29,15 @@
     //tree = tree;
     // console.log(tree);
   });
+
+  const listenTree = e => {
+    changeInfo = {
+      moveItemId: e.detail.moveItemId,
+      dropZoneId: e.detail.dropZoneId,
+      numberPosition: e.detail.numberPosition
+    };
+    console.log(changeInfo);
+  };
 </script>
 
 <style>
@@ -63,7 +73,7 @@
     <Button on:click={open}>Open</Button>
   </div>
   <div class="tree1">
-    <Tree data={tree} {icons} {flags} />
+    <Tree data={tree} {icons} {flags} on:changeTree={listenTree} />
   </div>
   <div class="table1">
     <!--  <Table></Table> -->

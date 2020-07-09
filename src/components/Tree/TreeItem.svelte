@@ -1,4 +1,5 @@
 <script>
+  import { createEventDispatcher } from "svelte";
   import { slide } from "svelte/transition";
   import { onMount } from "svelte";
   // import { dndzone } from "svelte-dnd-action";
@@ -16,12 +17,32 @@
   let over = false;
   let arrow = false;
 
+  const dispatch = createEventDispatcher();
+  let moveItemId;
+  let dropZoneId;
+  let numberPosition;
+
   function connectorClick(item) {
     if (!item.folder) return;
     item.open = !item.open;
     items = items;
     // console.log(item.flag);
     // console.log(item.open);
+  }
+  function sentPosition() {
+    let info = {
+      moveItemId,
+      dropZoneId,
+      numberPosition
+    };
+    console.log(info);
+
+    // dispatch("moveitem", {
+    //   moveItemId,
+    //   parentItemId,
+    //   numberPosition
+    // });
+    dispatch("moveitem", info);
   }
   onMount(() => {
     drag = document.querySelectorAll(".ddd");
@@ -31,15 +52,19 @@
     drag.forEach(element => {
       element.addEventListener("dragstart", function(event) {
         console.log("start");
-        // dropStatus.innerHTML =
-        //   "Dragging the " + event.target.getAttribute("id");
         event.dataTransfer.dropEffect = "move";
-        event.dataTransfer.setData("text", event.target.getAttribute("id"));
-        move = !move;
+        // event.dataTransfer.setData("text", event.target.getAttribute("id"));
+        moveItemId = event.target.getAttribute("id");
+        console.log(moveItemId);
+        // event.stopPropagation();
+      });
+      element.addEventListener("drag", function(event) {
+        move = true;
       });
       element.addEventListener("dragend", function(event) {
         console.log("end");
-        move = !move;
+        move = false;
+        // event.stopPropagation();
       });
     });
     drop.forEach(element => {
@@ -62,11 +87,17 @@
       element.addEventListener("drop", function(event) {
         event.preventDefault();
         this.classList.remove("over");
-        this.classList.remove("drop");
-        move = !move;
-        let elementID = event.dataTransfer.getData("text");
-        let element = document.getElementById(elementID);
-        this.appendChild(element);
+        // this.classList.remove("drop");
+        move = false;
+        // let elementID = event.dataTransfer.getData("text");
+        // let element = document.getElementById(elementID);
+        // this.appendChild(element);
+        dropZoneId = this.getAttribute("id");
+        numberPosition = event.target.dataset.number;
+        console.log(dropZoneId);
+        console.log(numberPosition);
+        sentPosition();
+        event.stopPropagation();
       });
     });
     drop2.forEach(element => {
@@ -81,20 +112,29 @@
         // console.log("enter");
         // over = !over;
         // arrow = !arrow;
+        this.style.paddingLeft = "25px";
         this.classList.add("arrow");
       });
       element.addEventListener("dragleave", function(event) {
+        this.style.paddingLeft = "";
         this.classList.remove("arrow");
         // over = !over;
       });
       element.addEventListener("drop", function(event) {
         event.preventDefault();
+        this.style.paddingLeft = "";
         this.classList.remove("arrow");
-        this.classList.remove("drop2");
-        move = !move;
-        let elementID = event.dataTransfer.getData("text");
-        let element = document.getElementById(elementID);
-        this.appendChild(element);
+        // this.classList.remove("drop2");
+        move = false;
+        // let elementID = event.dataTransfer.getData("text");
+        // let element = document.getElementById(elementID);
+        // this.appendChild(element);
+        dropZoneId = this.getAttribute("id");
+        numberPosition = event.target.dataset.number;
+        console.log(dropZoneId);
+        console.log(numberPosition);
+        sentPosition();
+        event.stopPropagation();
       });
     });
   });
@@ -137,11 +177,11 @@
 
 {#each items as item, i (item.id)}
   <div id={item.id} class="ddd" draggable="true">
-    <div id="drop{i * Math.random()}" class="drop" class:move class:over />
+    <div id={item.id} class="drop" data-number={i + 1} class:move class:over />
     <li
-      id="drop2{i * Math.random()}"
+      id={item.id}
       class:arrow
-      class="drop2"
+      class:drop2={item.folder}
       transition:slide
       class:folder={item.in}
       class:open={item.open}

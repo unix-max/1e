@@ -1,19 +1,32 @@
 <script>
   // import { onMount } from 'svelte';
   //export let post;
+  import { createEventDispatcher } from "svelte";
   import TreeItem from "./TreeItem.svelte";
 
   export let data = { in: [{ name: "Не загружен" }] };
   export let icons;
   export let flags;
+
+  const dispatch = createEventDispatcher();
+
+  const listenItem = e => {
+    let info = {
+      moveItemId: e.detail.moveItemId,
+      dropZoneId: e.detail.dropZoneId,
+      numberPosition: e.detail.numberPosition
+    };
+    console.log(info);
+    dispatch("changeTree", info);
+  };
 </script>
 
 <style>
   .tree {
     position: fixed;
-    padding: 20px 5px;
+    /* padding: 20px; */
     left: 0;
-    width: 400px;
+    width: 240px;
     height: 80vh;
     overflow: auto;
     border: 1px dotted gray;
@@ -25,9 +38,11 @@
     padding: 1px;
     margin: 1px;
   }
-
+  .tree :global(h3) {
+    text-align: center;
+  }
   .tree :global(ul li) {
-    padding-left: 25px;
+    padding-left: 10px;
     list-style-type: none; /*
 		background-repeat: repeat-y;
     
@@ -71,7 +86,7 @@
     cursor: pointer;
     margin: 2px;
   }
-  
+
   .tree :global(.treeConteiner > input) {
     position: relative;
     margin: 0;
@@ -94,7 +109,7 @@
 
   {#if data.in}
     <ul class="container">
-      <TreeItem parent={data} {icons} {flags} />
+      <TreeItem parent={data} {icons} {flags} on:moveitem={listenItem} />
     </ul>
   {/if}
 </div>
