@@ -10,22 +10,63 @@
   let type;
 
   function connectorClick(item) {
-    if (!item.folder) return;
+    if (!item.in) return;
     item.open = !item.open;
     items = items;
     // console.log(item.flag);
     // console.log(item.open);
   }
 
-  // const flipDurationMs = 500;
-  // function handleDndConsider(parent, e) {
-  //   console.log(e.detail.items);
-  //   items = e.detail.items;
-  //   //console.log(items1);
-  // }
-  // function handleDndFinalize(e) {
-  //   items = e.detail.items;
-  // }
+  function icon(item) {
+    if (item.in) {
+      if (item.open) {
+        if (icons[item.type] && icons[item.type].open) {
+          return icons[item.type].open;
+        } else {
+          return icons['default'].open;
+        }
+      } else {
+        if (icons[item.type] && icons[item.type].folder) {
+          return icons[item.type].folder;
+        } else {
+          return icons['default'].folder;
+        }
+      }
+    } else {
+      //console.log(icons[item.type])
+      //console.log(item);
+      if (icons[item.type].elm) {
+        return icons[item.type].elm;
+      } else {
+        return icons['default'].elm;
+      }
+
+    }
+  }
+  function flag(item) {
+    if (item.flag) {
+      if (Array.isArray(item.flag)) {
+        if (item.flag.length > 0) {
+          let fl =[];
+          for (let i=0; i < item.flag.length; i++) {
+            if (flags[item.flag[i]]) {
+              fl[i] = flags[item.flag[i]];
+            }
+          }
+          return fl;
+        } else return null;
+      } else {
+        if (flags[item.flag]) {
+          return [flags[item.flag]];
+        } else return null;
+      }
+    } else return null;
+  }
+
+  function itemEdit(item) {
+    item.edited=false;
+    items = items;
+  }
 </script>
 
 <style>
@@ -41,23 +82,32 @@
   <li
     transition:slide
     class:folder={item.in}
-    class:open={item.open}
-    type={item.name}>
+    class:open={item.open} 
+    type={item.type}>
+  
     <div class="treeConteiner">
       <span class="connector" on:click={() => connectorClick(item)} />
       <input type="checkbox" />
+<!--
+      {#if item.open} 
+        <Icon type="folderOpen" {icons} {flags} flagType={item.flag} /> 
 
-      {#if item.open}
-        <Icon type="folderOpen" {icons} {flags} flagType={item.flag} />
       {:else}
         <Icon
           type={item.type ? item.type : item.in ? 'folder' : 'html'}
           {icons}
           {flags}
           flagType={item.flag} />
-      {/if}
+      {/if}-->
+      <Icon
+          elem={icon(item)} 
+          flag={flag(item)}
+          />
+
       {#if !item.edited}
-        <span class="name">{item.name}</span>
+        <span class="name" on:click={() => item.edited=true}>{item.name}</span>
+      {:else}
+        <span class="name"><input bind:value={item.name} on:change={() => itemEdit(item)}/></span>
       {/if}
     </div>
     {#if item.open}

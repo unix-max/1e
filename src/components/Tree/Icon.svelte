@@ -1,29 +1,18 @@
 <script>
   import { scale } from "svelte/transition";
   import { onMount } from "svelte";
-  export let type = "doc";
-  export let flagType;
-  export let icons;
-  export let flags;
-  let flag = flagType ? flags[flagType] : null;
-  let elem = icons[type];
-  // console.log(icons.folderDoc);
+  //export let type = "default";
+  //export let flagType;
+  //export let icons;
+  //export let flags;
+  //let flag = flagType ? flags[flagType] : null;
+  //let elem = icons[type];
+  export let elem;
+  export let flag;
+  //let flag = ["../icons/Tipe3/cross3.png", "../icons/Tipe3/label.png"];
+   console.log(flag);
 
-  // onMount(async () => {
-  //   flag = flagType ? flags[flagType] : null;
-  //   elem = icons[type];
-  //   //console.log('mount');
-  //   let obj = await import("../clSpr.js");
-  //   let Spr = obj.default;
-  //   let spr = new Spr();
-  //   data = await spr.getData("http://localhost:3000/icon.json");
-  //   elem = data[type];
-  //   dataFlag = await spr.getData("http://localhost:3000/flag.json");
-  //   flag = dataFlag[flagType];
-  //   // console.log(flag);
-  // });
 
-  // console.log(flagStyle);
 </script>
 
 <style>
@@ -61,8 +50,10 @@
 </style>
 
 <span in:scale|local>
-  <img class="elem" src={elem} alt="img" />
+  <img class="elem" src={elem} alt="img" /> 
   {#if flag}
-    <img class="flag" src={flag} alt="flag" />
+    {#each flag as item}
+      <img class="flag" src={item} alt="flag" />
+    {/each}
   {/if}
 </span>
