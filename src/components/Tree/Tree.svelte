@@ -2,7 +2,7 @@
   // import { onMount } from 'svelte';
   //export let post;
   import { createEventDispatcher } from "svelte";
-  import TreeItem from "./TreeItem.svelte";
+  import TreeItem2 from "./TreeItem2.svelte";
 
   export let data = { in: [{ name: "Не загружен" }] };
   export let icons;
@@ -12,12 +12,13 @@
 
   const listenItem = e => {
     let info = {
-      moveItemId: e.detail.moveItemId,
-      dropZoneId: e.detail.dropZoneId,
+      moveItemNumber: e.detail.moveItemNumber,
+      moveFrom: e.detail.moveFrom,
+      moveTo: e.detail.moveTo,
       numberPosition: e.detail.numberPosition
     };
-    console.log(info);
-    dispatch("changeTree", info);
+    console.log("Дерево", info);
+    // dispatch("changeTree", info);
   };
 </script>
 
@@ -42,6 +43,8 @@
     text-align: center;
   }
   .tree :global(ul li) {
+    position: relative;
+    z-index: 10;
     padding-left: 10px;
     list-style-type: none; /*
 		background-repeat: repeat-y;
@@ -84,7 +87,7 @@
   }
   .tree :global(.treeConteiner) {
     cursor: pointer;
-    margin: 2px;
+    /* margin: 2px; */
   }
 
   .tree :global(.treeConteiner > input) {
@@ -95,7 +98,7 @@
   }
   .tree :global(.name) {
     outline: none;
-    padding: 2px;
+    /* padding: 2px; */
     transition: all 0.1s;
   }
   .tree :global(.treeConteiner:hover .name) {
@@ -109,7 +112,7 @@
 
   {#if data.in}
     <ul class="container">
-      <TreeItem parent={data} {icons} {flags} on:moveitem={listenItem} />
+      <TreeItem2 parent={data} {icons} {flags} on:moveitem={listenItem} />
     </ul>
   {/if}
 </div>

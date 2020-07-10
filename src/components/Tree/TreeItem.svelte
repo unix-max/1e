@@ -18,9 +18,12 @@
   let arrow = false;
 
   const dispatch = createEventDispatcher();
-  let moveItemId;
-  let dropZoneId;
+  let moveItemNumber;
+  let dropZoneParent;
   let numberPosition;
+  let moveItem;
+  let moveFrom;
+  let moveTo;
 
   function connectorClick(item) {
     if (!item.folder) return;
@@ -31,8 +34,9 @@
   }
   function sentPosition() {
     let info = {
-      moveItemId,
-      dropZoneId,
+      moveItemNumber,
+      moveFrom,
+      moveTo,
       numberPosition
     };
     console.log(info);
@@ -42,7 +46,7 @@
     //   parentItemId,
     //   numberPosition
     // });
-    dispatch("moveitem", info);
+    // dispatch("moveitem", info);
   }
   onMount(() => {
     drag = document.querySelectorAll(".ddd");
@@ -54,16 +58,16 @@
         console.log("start");
         event.dataTransfer.dropEffect = "move";
         // event.dataTransfer.setData("text", event.target.getAttribute("id"));
-        moveItemId = event.target.getAttribute("id");
-        console.log(moveItemId);
+        moveItemNumber = event.target.dataset.itemNumber;
+        console.log("номер перемещаемого итема", moveItemNumber);
         // event.stopPropagation();
       });
-      element.addEventListener("drag", function(event) {
-        move = true;
-      });
+      // element.addEventListener("drag", function(event) {
+      //   move = true;
+      // });
       element.addEventListener("dragend", function(event) {
         console.log("end");
-        move = false;
+        // move = false;
         // event.stopPropagation();
       });
     });
@@ -88,14 +92,14 @@
         event.preventDefault();
         this.classList.remove("over");
         // this.classList.remove("drop");
-        move = false;
+        // move = false;
         // let elementID = event.dataTransfer.getData("text");
         // let element = document.getElementById(elementID);
         // this.appendChild(element);
-        dropZoneId = this.getAttribute("id");
-        numberPosition = event.target.dataset.number;
-        console.log(dropZoneId);
-        console.log(numberPosition);
+        // dropZoneId = this.getAttribute("id");
+        numberPosition = event.target.dataset.dropNumber;
+        // console.log(dropZoneId);
+        console.log("номер слота", numberPosition);
         sentPosition();
         event.stopPropagation();
       });
@@ -125,14 +129,14 @@
         this.style.paddingLeft = "";
         this.classList.remove("arrow");
         // this.classList.remove("drop2");
-        move = false;
+        // move = false;
         // let elementID = event.dataTransfer.getData("text");
         // let element = document.getElementById(elementID);
         // this.appendChild(element);
-        dropZoneId = this.getAttribute("id");
-        numberPosition = event.target.dataset.number;
-        console.log(dropZoneId);
-        console.log(numberPosition);
+        // dropZoneId = this.getAttribute("id");
+        numberPosition = event.target.dataset.dropNumber;
+        // console.log(dropZoneId);
+        console.log("номер слота", numberPosition);
         sentPosition();
         event.stopPropagation();
       });
@@ -152,9 +156,9 @@
 
 <style>
   .drop {
-    display: none;
+    /* display: none; */
     width: 100%;
-    height: 1px;
+    height: 5px;
   }
   .over {
     height: 9px;
@@ -165,9 +169,9 @@
     background-position-x: 0px;
     background-position-y: 5px;
   }
-  .move {
+  /* .move {
     display: block;
-  }
+  } */
 </style>
 
 <!-- <section
@@ -176,10 +180,27 @@
   on:finalize={handleDndFinalize}> -->
 
 {#each items as item, i (item.id)}
-  <div id={item.id} class="ddd" draggable="true">
-    <div id={item.id} class="drop" data-number={i + 1} class:move class:over />
+  <div
+    data-item-number={i}
+    class="ddd"
+    draggable="true"
+    on:dragend|stopPropagation={() => {
+      moveFrom = parent;
+      console.log(' родитель перемещаемого итема', moveFrom);
+    }}>
+    <div
+      class="drop"
+      data-drop-number={i}
+      class:over
+      on:drop|stopPropagation={() => {
+        moveTo = parent;
+        console.log('родитель контейнера итем', moveTo);
+      }} />
     <li
-      id={item.id}
+      on:drop|stopPropagation={() => {
+        moveTo = item;
+        console.log('папка в которую перемещается объект', moveTo);
+      }}
       class:arrow
       class:drop2={item.folder}
       transition:slide
@@ -211,4 +232,13 @@
     </li>
   </div>
 {/each}
+<div
+  class="drop"
+  data-drop-number={items.length}
+  data-parent={parent}
+  class:over
+  on:drop|stopPropagation={() => {
+    moveTo = parent;
+    console.log('родитель контейнера итем', moveTo);
+  }} />
 <!-- </section> -->
