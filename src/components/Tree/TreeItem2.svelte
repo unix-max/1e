@@ -37,12 +37,6 @@
       numberPosition
     };
     console.log("В дереве", info);
-
-    // dispatch("moveitem", {
-    //   moveItemId,
-    //   parentItemId,
-    //   numberPosition
-    // });
     dispatch("moveitem", info);
   }
 
@@ -66,17 +60,8 @@
     event.target.classList.add("over");
   }
   function enterTwo(event, i) {
-    // console.log(event.target.dataset.drop2);
-    // if (event.path[2].classList[1] === "drop2") {
-    //   event.path[2].style.paddingLeft = "25px";
-    //   event.path[2].classList.add("arrow");
-    //   // arrow = true;
-    // }
     component = items[i].li;
     let drop2 = event.target.dataset.drop2;
-    console.log(drop2);
-
-    // console.log(component.dataset.drop2);
     if (drop2 === "folder") {
       component.style.paddingLeft = "25px";
       component.classList.add("arrow");
@@ -87,15 +72,8 @@
     event.target.classList.remove("over");
   }
   function leaveTwo(event, i) {
-    // if (event.path[2].classList[1] === "drop2") {
-    //   event.path[2].style.paddingLeft = "";
-    //   event.path[2].classList.remove("arrow");
-    //   // arrow = false;
-    // }
-    // console.log(event);
     component = items[i].li;
     let drop2 = event.target.dataset.drop2;
-    // console.log(component);
     if (drop2 === "folder") {
       component.style.paddingLeft = "";
       component.classList.remove("arrow");
@@ -110,12 +88,10 @@
     moveTo = parent;
     console.log("Куда", moveTo);
   }
-  function dropTwo(event, item, i) {
+  function dropTwo(event, item) {
     event.preventDefault();
     component.style.paddingLeft = "";
     component.classList.remove("arrow");
-    event.target.style.paddingLeft = "";
-    event.target.classList.remove("arrow");
     numberPosition = event.target.dataset.dropNumber;
     console.log("Номер слота куда", numberPosition);
     moveTo = item;
@@ -156,16 +132,16 @@
       data-drop-number={i}
       class:over
       on:dragover|preventDefault={event => overDrag(event)}
-      on:dragenter={event => enterOne(event)}
-      on:dragleave={event => leaveOne(event)}
+      on:dragenter|stopPropagation={event => enterOne(event)}
+      on:dragleave|stopPropagation={event => leaveOne(event)}
       on:drop|stopPropagation={event => {
         dropOne(event, parent);
       }} />
     <li
       bind:this={item.li}
       on:dragover|preventDefault={event => overDrag(event)}
-      on:dragenter={event => enterTwo(event, i)}
-      on:dragleave={event => leaveTwo(event, i)}
+      on:dragenter|stopPropagation={event => enterTwo(event, i)}
+      on:dragleave|stopPropagation={event => leaveTwo(event, i)}
       on:drop|stopPropagation={event => {
         dropTwo(event, item, i);
       }}
@@ -176,10 +152,7 @@
       class:open={item.open}
       type={item.name}>
       <div class="treeConteiner">
-        <span
-          class="connector"
-          on:click={() => connectorClick(item)}
-          data-drop2={item.folder ? 'folder' : 'file'} />
+        <span class="connector" on:click={() => connectorClick(item)} />
         <input type="checkbox" />
 
         {#if item.open}
@@ -211,8 +184,8 @@
   data-parent={parent}
   class:over
   on:dragover|preventDefault={event => overDrag(event)}
-  on:dragenter={event => enterOne(event)}
-  on:dragleave={event => leaveOne(event)}
+  on:dragenter|stopPropagation={event => enterOne(event)}
+  on:dragleave|stopPropagation={event => leaveOne(event)}
   on:drop|stopPropagation={event => {
     dropOne(event, parent);
   }} />
