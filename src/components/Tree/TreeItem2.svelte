@@ -29,27 +29,36 @@
     // console.log(item.flag);
     // console.log(item.open);
   }
-  function sentPosition() {
-    let info = {
-      moveItemNumber,
-      moveFrom,
-      moveTo,
-      numberPosition
-    };
-    console.log("В дереве", info);
-    dispatch("moveitem", info);
-  }
+
+  // function sentPosition() {
+  //   let info = {
+  //     moveItemNumber,
+  //     moveFrom,
+  //     moveTo,
+  //     numberPosition
+  //   };
+  //   console.log("В дереве", info);
+  //   dispatch("moveitem", info);
+  // }
 
   function moveStart(event) {
     console.log("start");
     event.dataTransfer.dropEffect = "move";
     moveItemNumber = event.target.dataset.itemNumber;
     console.log("номер перемещаемого итема", moveItemNumber);
+    let info1 = {
+      moveItemNumber
+    };
+    dispatch("moveinfo1", info1);
   }
   function moveEnd(event, parent) {
     moveFrom = parent;
     console.log("Откуда", moveFrom);
-    sentPosition();
+    // sentPosition();
+    let info3 = {
+      moveFrom
+    };
+    dispatch("moveinfo3", info3);
     console.log("end");
   }
   function overDrag(event) {
@@ -87,15 +96,30 @@
     console.log("Номер слота куда", numberPosition);
     moveTo = parent;
     console.log("Куда", moveTo);
+    let info2 = {
+      numberPosition,
+      moveTo
+    };
+    dispatch("moveinfo2", info2);
   }
   function dropTwo(event, item) {
-    event.preventDefault();
-    component.style.paddingLeft = "";
-    component.classList.remove("arrow");
-    numberPosition = event.target.dataset.dropNumber;
-    console.log("Номер слота куда", numberPosition);
-    moveTo = item;
-    console.log("папка в которую перемещается объект", moveTo);
+    let drop2 = event.target.dataset.drop2;
+    if (drop2 === "folder") {
+      event.preventDefault();
+      component.style.paddingLeft = "";
+      component.classList.remove("arrow");
+      numberPosition = event.target.dataset.dropNumber;
+      console.log("Номер слота куда", numberPosition);
+      moveTo = item;
+      console.log("папка в которую перемещается объект", moveTo);
+      let info2 = {
+        numberPosition,
+        moveTo
+      };
+      dispatch("moveinfo2", info2);
+    } else {
+      console.error("You can't drop into file!");
+    }
   }
 </script>
 
@@ -172,7 +196,13 @@
       </div>
       {#if item.open}
         <ul>
-          <svelte:self parent={item} {icons} {flags} on:moveitem />
+          <svelte:self
+            parent={item}
+            {icons}
+            {flags}
+            on:moveinfo1
+            on:moveinfo2
+            on:moveinfo3 />
         </ul>
       {/if}
     </li>

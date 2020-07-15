@@ -32,11 +32,12 @@
 
   const listenTree = e => {
     changeInfo = {
-      moveItemId: e.detail.moveItemId,
-      dropZoneId: e.detail.dropZoneId,
+      moveItemNumber: e.detail.moveItemNumber,
+      moveFrom: e.detail.moveFrom,
+      moveTo: e.detail.moveTo,
       numberPosition: e.detail.numberPosition
     };
-    console.log(changeInfo);
+    console.log("SprList", changeInfo);
   };
 </script>
 

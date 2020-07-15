@@ -10,15 +10,34 @@
 
   const dispatch = createEventDispatcher();
 
-  const listenItem = e => {
-    let info = {
-      moveItemNumber: e.detail.moveItemNumber,
-      moveFrom: e.detail.moveFrom,
-      moveTo: e.detail.moveTo,
-      numberPosition: e.detail.numberPosition
-    };
-    console.log("Дерево", info);
-    // dispatch("changeTree", info);
+  let info = {};
+
+  // const listenItem = e => {
+  //   let info = {
+  //     moveItemNumber: e.detail.moveItemNumber,
+  //     moveFrom: e.detail.moveFrom,
+  //     moveTo: e.detail.moveTo,
+  //     numberPosition: e.detail.numberPosition
+  //   };
+  //   console.log("Дерево", info);
+  //   // dispatch("changeTree", info);
+  // };
+
+  const listeninfo1 = e => {
+    info.moveItemNumber = e.detail.moveItemNumber;
+    // console.log("Дерево1", info);
+  };
+  const listeninfo2 = e => {
+    info.numberPosition = e.detail.numberPosition;
+    info.moveTo = e.detail.moveTo;
+    // console.log("Дерево2", info);
+  };
+  const listeninfo3 = e => {
+    info.moveFrom = e.detail.moveFrom;
+    console.log("Дерево3", info);
+    if (info.moveTo) {
+      dispatch("changeTree", info);
+    }
   };
 </script>
 
@@ -112,7 +131,13 @@
 
   {#if data.in}
     <ul class="container">
-      <TreeItem2 parent={data} {icons} {flags} on:moveitem={listenItem} />
+      <TreeItem2
+        parent={data}
+        {icons}
+        {flags}
+        on:moveinfo1={listeninfo1}
+        on:moveinfo2={listeninfo2}
+        on:moveinfo3={listeninfo3} />
     </ul>
   {/if}
 </div>
