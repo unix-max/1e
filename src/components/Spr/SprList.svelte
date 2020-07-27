@@ -1,7 +1,6 @@
 <script>
-  import { onMount, onDestroy } from "svelte";
+  import { onMount } from "svelte";
   import Tree from "../Tree/Tree.svelte";
-  import tree from "../Tree/Tree-storege.js";
   //import Table from '1eLib/Table/Table.svelte';
   //import SprElm from '1eLib/Spr/SprElm.svelte';
   import Popup from "svelte-atoms/Popup.svelte";
@@ -11,11 +10,13 @@
   const close = () => (isOpen = false);
   const open = () => (isOpen = true);
 
-  let clientTree = {};
+  let tree = {};
   let icons;
   let flags;
   let changeInfo;
   let unsubscribe;
+
+  // $: myTree = { ...tree };
 
   onMount(async () => {
     //console.log('mount');
@@ -27,23 +28,10 @@
     flags = await spr.getData("http://localhost:3000/flag.json");
     // console.log(icons);
 
-    clientTree.in = spr.folders;
+    tree.in = spr.folders;
 
-    tree.setTree(clientTree);
-
-    // unsubscribe = tree.subscribe(items => {
-    //   clientTree = items;
-    // });
-
-    //tree = tree;
-    console.log($tree);
+    // console.log(tree);
   });
-
-  // onDestroy(() => {
-  //   if (unsubscribe) {
-  //     unsubscribe();
-  //   }
-  // });
 
   const listenTree = e => {
     changeInfo = {
@@ -53,13 +41,17 @@
       numberPosition: e.detail.numberPosition
     };
     console.log("SprList", changeInfo);
+    const newTree = tree;
+    // console.log("newTree", newTree);
+    const moveItem = changeInfo.moveFrom.in[changeInfo.moveItemNumber];
 
-    tree.updateTree(
-      changeInfo.moveItemNumber,
-      changeInfo.numberPosition,
-      changeInfo.moveFrom,
-      changeInfo.moveTo
-    );
+    changeInfo.moveFrom.in.splice(changeInfo.moveItemNumber, 1);
+
+    if (changeInfo.numberPosition > changeInfo.moveItemNumber) {
+      changeInfo.moveTo.in.splice(changeInfo.numberPosition - 1, 0, moveItem);
+    } else {
+      changeInfo.moveTo.in.splice(changeInfo.numberPosition, 0, moveItem);
+    }
   };
 </script>
 
@@ -96,7 +88,7 @@
     <Button on:click={open}>Open</Button>
   </div>
   <div class="tree1">
-    <Tree {icons} {flags} on:changeTree={listenTree} />
+    <Tree data={tree} {icons} {flags} on:changeTree={listenTree} />
   </div>
   <div class="table1">
     <!--  <Table></Table> -->
