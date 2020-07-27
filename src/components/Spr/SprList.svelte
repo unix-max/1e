@@ -29,6 +29,7 @@
     // console.log(icons);
 
     tree.in = spr.folders;
+    tree.update = false;
 
     // console.log(tree);
   });
@@ -41,17 +42,25 @@
       numberPosition: e.detail.numberPosition
     };
     console.log("SprList", changeInfo);
-    const newTree = tree;
-    // console.log("newTree", newTree);
+
     const moveItem = changeInfo.moveFrom.in[changeInfo.moveItemNumber];
 
-    changeInfo.moveFrom.in.splice(changeInfo.moveItemNumber, 1);
+    const oldParent = changeInfo.moveFrom;
+    oldParent.in.splice(changeInfo.moveItemNumber, 1);
+    changeInfo.moveFrom.in = [...oldParent.in];
 
     if (changeInfo.numberPosition > changeInfo.moveItemNumber) {
-      changeInfo.moveTo.in.splice(changeInfo.numberPosition - 1, 0, moveItem);
+      const newParent = changeInfo.moveTo;
+      newParent.in.splice(changeInfo.numberPosition - 1, 0, moveItem);
+      changeInfo.moveTo.in = [...newParent.in];
     } else {
-      changeInfo.moveTo.in.splice(changeInfo.numberPosition, 0, moveItem);
+      const newParent = changeInfo.moveTo;
+      newParent.in.splice(changeInfo.numberPosition, 0, moveItem);
+      changeInfo.moveTo.in = [...newParent.in];
     }
+    tree.update = !tree.update;
+    tree = tree;
+    // console.log(tree);
   };
 </script>
 

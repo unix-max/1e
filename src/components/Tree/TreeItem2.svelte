@@ -7,7 +7,7 @@
   export let parent;
   export let icons;
   export let flags;
-  let items = parent.in;
+  $: items = parent.in;
   let type;
   let move = false;
   let over = false;
