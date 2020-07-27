@@ -44,7 +44,7 @@
   function moveStart(event) {
     console.log("start");
     event.dataTransfer.dropEffect = "move";
-    moveItemNumber = event.target.dataset.itemNumber;
+    moveItemNumber = +event.target.dataset.itemNumber;
     console.log("номер перемещаемого итема", moveItemNumber);
     let info1 = {
       moveItemNumber
@@ -92,7 +92,7 @@
   function dropOne(event, parent) {
     event.preventDefault();
     event.target.classList.remove("over");
-    numberPosition = event.target.dataset.dropNumber;
+    numberPosition = +event.target.dataset.dropNumber;
     console.log("Номер слота куда", numberPosition);
     moveTo = parent;
     console.log("Куда", moveTo);

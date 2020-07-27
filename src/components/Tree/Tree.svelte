@@ -3,8 +3,9 @@
   //export let post;
   import { createEventDispatcher } from "svelte";
   import TreeItem2 from "./TreeItem2.svelte";
+  import tree from "./Tree-storege.js";
 
-  export let data = { in: [{ name: "Не загружен" }] };
+  // export let data = { in: [{ name: "Не загружен" }] };
   export let icons;
   export let flags;
 
@@ -129,10 +130,10 @@
 <div class="tree">
   <h3>Tree</h3>
 
-  {#if data.in}
+  {#if $tree.in}
     <ul class="container">
       <TreeItem2
-        parent={data}
+        parent={$tree}
         {icons}
         {flags}
         on:moveinfo1={listeninfo1}

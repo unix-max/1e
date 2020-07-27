@@ -1,6 +1,7 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import Tree from "../Tree/Tree.svelte";
+  import tree from "../Tree/Tree-storege.js";
   //import Table from '1eLib/Table/Table.svelte';
   //import SprElm from '1eLib/Spr/SprElm.svelte';
   import Popup from "svelte-atoms/Popup.svelte";
@@ -10,10 +11,11 @@
   const close = () => (isOpen = false);
   const open = () => (isOpen = true);
 
-  let tree = {};
+  let clientTree = {};
   let icons;
   let flags;
   let changeInfo;
+  let unsubscribe;
 
   onMount(async () => {
     //console.log('mount');
@@ -25,10 +27,23 @@
     flags = await spr.getData("http://localhost:3000/flag.json");
     // console.log(icons);
 
-    tree.in = spr.folders;
+    clientTree.in = spr.folders;
+
+    tree.setTree(clientTree);
+
+    // unsubscribe = tree.subscribe(items => {
+    //   clientTree = items;
+    // });
+
     //tree = tree;
-    // console.log(tree);
+    console.log($tree);
   });
+
+  // onDestroy(() => {
+  //   if (unsubscribe) {
+  //     unsubscribe();
+  //   }
+  // });
 
   const listenTree = e => {
     changeInfo = {
@@ -38,6 +53,13 @@
       numberPosition: e.detail.numberPosition
     };
     console.log("SprList", changeInfo);
+
+    tree.updateTree(
+      changeInfo.moveItemNumber,
+      changeInfo.numberPosition,
+      changeInfo.moveFrom,
+      changeInfo.moveTo
+    );
   };
 </script>
 
@@ -74,7 +96,7 @@
     <Button on:click={open}>Open</Button>
   </div>
   <div class="tree1">
-    <Tree data={tree} {icons} {flags} on:changeTree={listenTree} />
+    <Tree {icons} {flags} on:changeTree={listenTree} />
   </div>
   <div class="table1">
     <!--  <Table></Table> -->
