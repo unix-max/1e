@@ -30,17 +30,6 @@
     // console.log(item.open);
   }
 
-  // function sentPosition() {
-  //   let info = {
-  //     moveItemNumber,
-  //     moveFrom,
-  //     moveTo,
-  //     numberPosition
-  //   };
-  //   console.log("В дереве", info);
-  //   dispatch("moveitem", info);
-  // }
-
   function moveStart(event) {
     console.log("start");
     event.dataTransfer.dropEffect = "move";

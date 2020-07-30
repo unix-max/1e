@@ -5,6 +5,7 @@
   //import SprElm from '1eLib/Spr/SprElm.svelte';
   import Popup from "svelte-atoms/Popup.svelte";
   import Button from "svelte-atoms/Button.svelte";
+  import Editor from "../Editor/Editor.svelte";
 
   let isOpen = false;
   const close = () => (isOpen = false);
@@ -78,28 +79,40 @@
   .footer1 {
     grid-area: footer;
   }
+  .main {
+    display: flex;
+    padding: 0;
+  }
+  .editorConteiner {
+    margin: 0 auto;
+  }
 </style>
 
 <svelte:head>
   <title>Sapper project template</title>
 </svelte:head>
 
-<div class="container">
+<div class="main">
   <div class="header1">
     <Button on:click={open}>Open</Button>
   </div>
-  <div class="tree1">
-    <Tree data={tree} {icons} {flags} on:changeTree={listenTree} />
+  <div class="container">
+    <div class="tree1">
+      <Tree data={tree} {icons} {flags} on:changeTree={listenTree} />
+    </div>
+    <div class="table1">
+      <!--  <Table></Table> -->
+    </div>
+    <div class="footer1" />
+    <!--
+      <Popup {isOpen} on:close={close} header="Title">
+      <SprElm elm={tree.in[1]}/>
+      <div slot="footer">
+        <Button on:click={close}>Ok</Button>
+      </div>
+    </Popup> -->
   </div>
-  <div class="table1">
-    <!--  <Table></Table> -->
+  <div class="editorConteiner">
+    <Editor />
   </div>
-  <div class="footer1" />
-  <!--
-  <Popup {isOpen} on:close={close} header="Title">
-  <SprElm elm={tree.in[1]}/>
-  <div slot="footer">
-    <Button on:click={close}>Ok</Button>
-  </div>
-</Popup> -->
 </div>
